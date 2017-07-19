@@ -64,7 +64,7 @@ section 脚部高度
     self.refreshHeaderHidden = YES;
     self.refreshFooterHidden = YES;    
     [self.tableView registerClass:[UITableViewCell class]
-        =  forCellReuseIdentifier:@"cell"];
+         = forCellReuseIdentifier:@"cell"];
 
     self.EMCellHeightBlock = ^CGFloat(NSInteger index) {
         if (index % 2 == 0) {
@@ -81,5 +81,47 @@ section 脚部高度
 }
 ```
 ## Sections List
+```
+- (void)setupTableView {
+    self.sectionMode = YES;
+    self.cellIdentifier = @"cell";
+    self.refreshHeaderHidden = YES;
+    self.refreshFooterHidden = YES;  
+    self.stabledCellHeight = 100.0;
+    [self.tableView registerClass:[UITableViewCell class]
+         = forCellReuseIdentifier:@"cell"];
+
+    self.EMHeadHeightBlock = ^CGFloat(NSInteger index) {
+        if (index == 0) {
+            return 10.0;
+        }
+        else {
+            return 10.0;
+        }
+    };
+
+    [self em_reloadData:^(UITableViewCell *cell, NSString *item) {
+        cell.textLabel.text = item;
+    }];
+}
+```
 
 ## Header/Footer Refresh
+#pragma mark - Refresh
+- (void)em_headerRefresh {
+    [self.dataList removeAllObjects];
+    for (NSInteger i = 0; i < 20; i++) {
+        [self.dataList addObject:@(i).stringValue];
+    }
+    [super em_headerRefresh];
+}
+
+- (void)em_footerRefresh {
+    NSInteger count = (arc4random() + 1) % 20;
+    for (NSInteger i = 0; i < count; i++) {
+        [self.dataList addObject:@(i).stringValue];
+    }
+
+    self.em_start += count;
+    [super em_footerRefresh];
+}
