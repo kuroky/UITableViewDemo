@@ -61,17 +61,17 @@ typedef void (^EMCellConfigBlock)(id cell, id item);
 @property (nonatomic) CGFloat sectionFooterHeight;
 
 /**
- 配置cell高度
+ 自定cell高度
  */
 @property (nonatomic, copy) CGFloat (^EMCellHeightBlock)(NSInteger index);
 
 /**
- 配置section 头部高度
+ 自定义section 头部高度
  */
 @property (nonatomic, copy) CGFloat (^EMHeadHeightBlock)(NSInteger index);
 
 /**
- 配置section 脚部高度
+ 自定义section 脚部高度
  */
 @property (nonatomic, copy) CGFloat (^EMFootHeightBlock)(NSInteger index);
 
@@ -84,9 +84,9 @@ typedef void (^EMCellConfigBlock)(id cell, id item);
 
 @property (nonatomic, strong, readonly) UITableView *tableView;
 
-- (void)em_headerRefresh; // 头部
+- (void)em_headerRefresh; // 下拉刷新
 
-- (void)em_footerRefresh; // 底部
+- (void)em_footerRefresh; // 上拉刷新
 
 
 @end
