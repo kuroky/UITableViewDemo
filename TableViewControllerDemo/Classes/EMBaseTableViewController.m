@@ -7,7 +7,7 @@
 //
 
 #import "EMBaseTableViewController.h"
-#import "EMBaseColor.h"
+//#import "EMBaseColor.h"
 
 @interface EMBaseTableViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -34,7 +34,7 @@
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = [EMBaseColor em_tableViewLineColor];
+    //self.tableView.separatorColor = [EMBaseColor em_tableViewLineColor];
     self.tableView.separatorInset = UIEdgeInsetsZero;
     [self.view addSubview:self.tableView];
     
@@ -57,7 +57,6 @@
 }
 
 - (void)em_headerRefresh {
-    [self.dataList removeAllObjects];
     [self.tableView reloadData];
     self.em_start = 0;
     [self.tableView.mj_header endRefreshing];
@@ -65,6 +64,7 @@
 }
 
 - (void)em_footerRefresh {
+    [self.tableView reloadData];
     [self.tableView.mj_footer endRefreshing];
     if (self.em_start % self.em_count != 0) {
         self.tableView.mj_footer.hidden = YES;

@@ -5,6 +5,6 @@ target 'TableViewControllerDemo' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
 
-  # Pods for TableViewControllerDemo
+  pod 'MJRefresh', '~> 3.1.12'
 
 end

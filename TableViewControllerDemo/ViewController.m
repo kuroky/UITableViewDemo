@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "FirstViewController.h"
 
 @interface ViewController ()
 
@@ -16,7 +17,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    self.view.backgroundColor = [UIColor whiteColor];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(100, 100, 175, 40);
+    [btn setBackgroundColor:[UIColor lightGrayColor]];
+    [self.view addSubview:btn];
+    [btn addTarget:self
+            action:@selector(pushViewController)
+  forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)pushViewController {
+    [self.navigationController pushViewController:[FirstViewController new]
+                                         animated:YES];
 }
 
 
