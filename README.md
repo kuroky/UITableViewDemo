@@ -1,5 +1,73 @@
-# UITableViewDemo
+## UITableViewDemo
 UIViewController + UITableView + MJRefresh 实践
+###快速集成
+####1.通过COcoaPod安装
+
+```
+...
+```
+####2.手动安装
+```
+将Classes文件夹添加至项目
+``` 
+###使用说明
+- 新建`ViewController`继承`MXBaseTableViewController`即可
+
+```
+@interface FirstViewController : MXBaseTableViewController
+```
+
+- `UITableView`配置
+
+```
+// tableView设置
+self.tableView.frame = self.view.bounds;
+self.cellIdentifier = @"cell";
+self.hideHeaderRefresh = YES; 
+self.hideFooterRefresh = YES;
+[self.tableView registerClass:[UITableViewCell class]
+       forCellReuseIdentifier:@"cell"];
+
+// 自定义Cell高度       
+self.MXCellHeightBlock = ^CGFloat(NSIndexPath *indexPath) {
+    if (indexPath.row % 2 == 0) {
+        return 50.0;
+       }
+    else {
+        return 100.0;
+    }
+};
+
+// 加载cell数据    
+[self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
+    cell.textLabel.text = item;
+}];
+```
+
+- Refresh
+
+```
+- (void)mx_headerRefresh {
+    [self.dataList removeAllObjects];
+    self.mx_start = 0;
+    for (NSInteger i = 0; i < 20; i++) {
+        [self.dataList addObject:@(i).stringValue];
+    }
+    self.hideFooterRefresh = NO;
+    [super mx_headerRefresh];
+}
+
+- (void)mx_footerRefresh {
+    NSInteger count = (arc4random() + 1) % 20;
+    for (NSInteger i = 0; i < count; i++) {
+        [self.dataList addObject:@(i).stringValue];
+    }
+    
+    self.mx_start = self.dataList.count;
+    [super mx_footerRefresh];
+}
+```
+###API
 
 ```
 /**
@@ -96,75 +164,10 @@ typedef void (^MXCellConfigBlock)(id cell, id item, NSIndexPath *indexPath);
 - (void)mx_footerRefresh;
 
 ```
+###已知Issues
 
-
-## Rows List
 ```
-self.tableView.frame = self.view.bounds;
-self.cellIdentifier = @"cell";
-self.hideHeaderRefresh = YES;
-self.hideFooterRefresh = YES;
-[self.tableView registerClass:[UITableViewCell class]
-       forCellReuseIdentifier:@"cell"];
-    
-self.MXCellHeightBlock = ^CGFloat(NSIndexPath *indexPath) {
-    if (indexPath.row % 2 == 0) {
-        return 50.0;
-       }
-    else {
-        return 100.0;
-    }
-};
-    
-[self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
-    cell.textLabel.text = item;
-}];
-```
-## Sections List
-```
-self.tableView.frame = self.view.bounds;
-self.sectionIsSingle = NO;
-self.cellIdentifier = @"cell";
-self.hideHeaderRefresh = YES;
-self.hideFooterRefresh = YES;  
-self.rowHeight = 100.0;
-[self.tableView registerClass:[UITableViewCell class]
-       forCellReuseIdentifier:@"cell"];
-    
-self.MXHeaderHeightBlock = ^CGFloat(NSInteger index) {
-    if (index == 0) {
-        return 0;
-    }
-    else {
-        return 10.0;
-    }
-};
-    
-[self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
-    cell.textLabel.text = item;
-}];
-```
-
-## Header/Footer Refresh
-```
-- (void)mx_headerRefresh {
-    [self.dataList removeAllObjects];
-    self.mx_start = 0;
-    for (NSInteger i = 0; i < 20; i++) {
-        [self.dataList addObject:@(i).stringValue];
-    }
-    self.hideFooterRefresh = NO;
-    [super mx_headerRefresh];
-}
-
-- (void)mx_footerRefresh {
-    NSInteger count = (arc4random() + 1) % 20;
-    for (NSInteger i = 0; i < count; i++) {
-        [self.dataList addObject:@(i).stringValue];
-    }
-    
-    self.mx_start = self.dataList.count;
-    [super mx_footerRefresh];
-}
+1. tableView只支持同一种Cell
+2. 不支持sections, rows混排
 ```
 
