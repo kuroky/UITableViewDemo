@@ -1,16 +1,16 @@
 ## UITableViewDemo
 UIViewController + UITableView + MJRefresh 实践
-###快速集成
-####1.通过COcoaPod安装
+### 快速集成
+#### 1.通过COcoaPod安装
 
 ```
 ...
 ```
-####2.手动安装
+#### 2.手动安装
 ```
 将Classes文件夹添加至项目
 ``` 
-###使用说明
+### 使用说明
 - 新建`ViewController`继承`MXBaseTableViewController`即可
 
 ```
@@ -67,7 +67,7 @@ self.MXCellHeightBlock = ^CGFloat(NSIndexPath *indexPath) {
     [super mx_footerRefresh];
 }
 ```
-###API
+### API
 
 ```
 /**
@@ -164,7 +164,7 @@ typedef void (^MXCellConfigBlock)(id cell, id item, NSIndexPath *indexPath);
 - (void)mx_footerRefresh;
 
 ```
-###已知Issues
+### 已知Issues
 
 ```
 1. tableView只支持同一种Cell
