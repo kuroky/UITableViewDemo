@@ -1,14 +1,14 @@
 //
-//  EMRefreshHeader.m
+//  MXRefreshHeader.m
 //  Emucoo
 //
 //  Created by kuroky on 2017/6/20.
 //  Copyright © 2017年 Emucoo. All rights reserved.
 //
 
-#import "EMRefreshHeader.h"
+#import "MXRefreshHeader.h"
 
-@implementation EMRefreshHeader
+@implementation MXRefreshHeader
 
 - (void)prepare {
     [super prepare];

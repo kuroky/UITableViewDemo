@@ -1,5 +1,5 @@
 //
-//  EMRefreshHeader.h
+//  MXRefreshHeader.h
 //  Emucoo
 //
 //  Created by kuroky on 2017/6/20.
@@ -8,6 +8,6 @@
 
 #import <MJRefresh/MJRefresh.h>
 
-@interface EMRefreshHeader : MJRefreshGifHeader
+@interface MXRefreshHeader : MJRefreshGifHeader
 
 @end

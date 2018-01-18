@@ -31,14 +31,17 @@
 }
 
 - (void)setupTableView {
+    self.tableView.frame = self.view.bounds;
     self.cellIdentifier = @"cell";
-    self.refreshHeaderHidden = YES;
-    self.refreshFooterHidden = YES;
-    self.stabledCellHeight = 100.0;
+    self.sectionIsSingle = YES;
+    self.hideHeaderRefresh = YES;
+    self.hideFooterRefresh = YES;
+    
+    self.rowHeight = 100.0;
     [self.tableView registerClass:[UITableViewCell class]
            forCellReuseIdentifier:@"cell"];
     
-    [self em_reloadData:^(UITableViewCell *cell, NSString *item) {
+    [self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
         cell.textLabel.text = item;
     }];
 }

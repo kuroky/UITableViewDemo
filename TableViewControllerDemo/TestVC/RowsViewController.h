@@ -6,8 +6,8 @@
 //  Copyright © 2017年 kuroky. All rights reserved.
 //
 
-#import "EMBaseTableViewController.h"
+#import "MXBaseTableViewController.h"
 
-@interface RowsViewController : EMBaseTableViewController
+@interface RowsViewController : MXBaseTableViewController
 
 @end

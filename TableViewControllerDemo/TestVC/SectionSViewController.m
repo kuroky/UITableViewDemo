@@ -26,21 +26,22 @@
 
 - (void)setupUI {
     self.navigationItem.title = @"First";
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [UIColor yellowColor];
     [self setupTableView];
 }
 
 - (void)setupTableView {
-    self.sectionMode = YES;
+    self.tableView.frame = self.view.bounds;
+    self.sectionIsSingle = NO;
     self.cellIdentifier = @"cell";
-    self.refreshHeaderHidden = YES;
-    self.refreshFooterHidden = YES;
+    self.hideHeaderRefresh = YES;
+    self.hideFooterRefresh = YES;
     
-    self.stabledCellHeight = 100.0;
+    self.rowHeight = 100.0;
     [self.tableView registerClass:[UITableViewCell class]
            forCellReuseIdentifier:@"cell"];
     
-    self.EMHeadHeightBlock = ^CGFloat(NSInteger index) {
+    self.MXHeaderHeightBlock = ^CGFloat(NSInteger index) {
         if (index == 0) {
             return 0;
         }
@@ -49,7 +50,7 @@
         }
     };
     
-    [self em_reloadData:^(UITableViewCell *cell, NSString *item) {
+    [self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
         cell.textLabel.text = item;
     }];
 }

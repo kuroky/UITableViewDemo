@@ -6,8 +6,8 @@
 //  Copyright © 2017年 kuroky. All rights reserved.
 //
 
-#import "EMBaseTableViewController.h"
+#import "MXBaseTableViewController.h"
 
-@interface FirstViewController : EMBaseTableViewController
+@interface FirstViewController : MXBaseTableViewController
 
 @end

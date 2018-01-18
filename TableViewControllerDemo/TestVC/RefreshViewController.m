@@ -31,14 +31,15 @@
 }
 
 - (void)setupTableView {
-    self.sectionMode = YES;
+    self.tableView.frame = self.view.bounds;
+    self.sectionIsSingle = NO;
     self.cellIdentifier = @"cell";
-    
-    self.stabledCellHeight = 100.0;
+    self.rowHeight = 100.0;
+    self.hideFooterRefresh = YES;
     [self.tableView registerClass:[UITableViewCell class]
            forCellReuseIdentifier:@"cell"];
     
-    self.EMHeadHeightBlock = ^CGFloat(NSInteger index) {
+    self.MXHeaderHeightBlock = ^CGFloat(NSInteger index) {
         if (index == 0) {
             return 0;
         }
@@ -47,28 +48,39 @@
         }
     };
     
-    [self em_reloadData:^(UITableViewCell *cell, NSString *item) {
-        cell.textLabel.text = item;
+    self.MXCellHeightBlock = ^CGFloat(NSIndexPath *indexPath) {
+        if (indexPath.row % 2 == 0) {
+            return 60;
+        }
+        else {
+            return 120;
+        }
+    };
+    
+    [self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
+        cell.textLabel.text = @(indexPath.section).stringValue;
     }];
 }
 
 #pragma mark - Refresh
-- (void)em_headerRefresh {
+- (void)mx_headerRefresh {
     [self.dataList removeAllObjects];
+    self.mx_start = 0;
     for (NSInteger i = 0; i < 20; i++) {
         [self.dataList addObject:@(i).stringValue];
     }
-    [super em_headerRefresh];
+    self.hideFooterRefresh = NO;
+    [super mx_headerRefresh];
 }
 
-- (void)em_footerRefresh {
+- (void)mx_footerRefresh {
     NSInteger count = (arc4random() + 1) % 20;
     for (NSInteger i = 0; i < count; i++) {
         [self.dataList addObject:@(i).stringValue];
     }
     
-    self.em_start += count;
-    [super em_footerRefresh];
+    self.mx_start = self.dataList.count;
+    [super mx_footerRefresh];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

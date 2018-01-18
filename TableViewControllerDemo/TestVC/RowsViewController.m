@@ -31,14 +31,15 @@
 }
 
 - (void)setupTableView {
+    self.tableView.frame = self.view.bounds;
     self.cellIdentifier = @"cell";
-    self.refreshHeaderHidden = YES;
-    self.refreshFooterHidden = YES;    
+    self.hideHeaderRefresh = YES;
+    self.hideFooterRefresh = YES;
     [self.tableView registerClass:[UITableViewCell class]
            forCellReuseIdentifier:@"cell"];
     
-    self.EMCellHeightBlock = ^CGFloat(NSInteger index) {
-        if (index % 2 == 0) {
+    self.MXCellHeightBlock = ^CGFloat(NSIndexPath *indexPath) {
+        if (indexPath.row % 2 == 0) {
             return 50.0;
         }
         else {
@@ -46,7 +47,7 @@
         }
     };
     
-    [self em_reloadData:^(UITableViewCell *cell, NSString *item) {
+    [self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
         cell.textLabel.text = item;
     }];
 }

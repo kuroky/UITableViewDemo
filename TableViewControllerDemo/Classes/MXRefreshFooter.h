@@ -1,5 +1,5 @@
 //
-//  EMRefreshFooter.h
+//  MXRefreshFooter.h
 //  Emucoo
 //
 //  Created by kuroky on 2017/6/20.
@@ -8,6 +8,6 @@
 
 #import <MJRefresh/MJRefresh.h>
 
-@interface EMRefreshFooter : MJRefreshAutoStateFooter
+@interface MXRefreshFooter : MJRefreshAutoStateFooter
 
 @end
