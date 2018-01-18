@@ -77,14 +77,28 @@ typedef void (^MXCellConfigBlock)(id cell, id item, NSIndexPath *indexPath);
 @property (nonatomic, copy) CGFloat (^MXFooterHeightBlock)(NSInteger section);
 
 #pragma mark - Refresh
-@property (nonatomic, assign) BOOL hideHeaderRefresh; // 隐藏头部
-@property (nonatomic, assign) BOOL hideFooterRefresh; // 隐藏底部
+
+/**
+ 隐藏头部
+ */
+@property (nonatomic, assign) BOOL hideHeaderRefresh;
+
+/**
+ 隐藏底部
+ */
+@property (nonatomic, assign) BOOL hideFooterRefresh;
 
 @property (nonatomic, assign) NSInteger mx_start;
 @property (nonatomic, assign) NSInteger mx_count;
 
-- (void)mx_headerRefresh; // 下拉刷新
+/**
+ 下拉刷新
+ */
+- (void)mx_headerRefresh;
 
-- (void)mx_footerRefresh; // 上拉刷新
+/**
+ 上拉刷新
+ */
+- (void)mx_footerRefresh;
 
 @end

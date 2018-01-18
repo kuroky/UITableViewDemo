@@ -3,128 +3,168 @@ UIViewController + UITableView + MJRefresh 实践
 
 ```
 /**
-reload tableview之前调用
-
-@param block cell设置
-*/
-- (void)em_reloadData:(EMCellConfigBlock)block;
+ cell设置
+ 
+ @param cell custom cell
+ @param item model data
+ @param indexPath NSIndexPath
+ */
+typedef void (^MXCellConfigBlock)(id cell, id item, NSIndexPath *indexPath);
 
 /**
-cell identifier
-*/
+ Custom TableViewController
+ */
+@interface MXBaseTableViewController : UIViewController
+
+/**
+ reload tableview之前调用
+ 
+ @param block cell设置
+ */
+- (void)mx_reloadData:(MXCellConfigBlock)block;
+
+@property (strong, nonatomic, readonly) UITableView *tableView;
+
+/**
+ tableview section 一行 
+ */
+@property (assign, nonatomic) BOOL sectionIsSingle;
+
+/**
+ cell identifier
+ */
 @property (nonatomic, copy) NSString *cellIdentifier;
 
 /**
-是否只有section或只有rows (不支持section下有多个rows) (默认 section count == 1)
-*/
-@property (nonatomic) BOOL sectionMode;
-
-/**
-数据源
-*/
+ Data Source
+ */
 @property (nonatomic, strong) NSMutableArray *dataList;
 
 /**
-cell固定高度
-*/
-@property (nonatomic) CGFloat stabledCellHeight;
+ cell rowHeight
+ */
+@property (nonatomic, assign) CGFloat rowHeight;
 
 /**
-section 头部高度
-*/
-@property (nonatomic) CGFloat sectionHeaderHeight;
+ section header高度
+ */
+@property (nonatomic, assign) CGFloat sectionHeaderHeight;
 
 /**
-section 脚部高度
-*/
-@property (nonatomic) CGFloat sectionFooterHeight;
+ section footer高度
+ */
+@property (nonatomic, assign) CGFloat sectionFooterHeight;
 
 /**
-配置cell高度
-*/
-@property (nonatomic, copy) CGFloat (^EMCellHeightBlock)(NSInteger index);
+ 自定义cell高度
+ */
+@property (nonatomic, copy) CGFloat (^MXCellHeightBlock)(NSIndexPath *indexPath);
 
 /**
-配置section 头部高度
-*/
-@property (nonatomic, copy) CGFloat (^EMHeadHeightBlock)(NSInteger index);
+ 自定义section 头部高度
+ */
+@property (nonatomic, copy) CGFloat (^MXHeaderHeightBlock)(NSInteger section);
 
 /**
-配置section 脚部高度
-*/
-@property (nonatomic, copy) CGFloat (^EMFootHeightBlock)(NSInteger index);
+ 自定义section 脚部高度
+ */
+@property (nonatomic, copy) CGFloat (^MXFooterHeightBlock)(NSInteger section);
+
+#pragma mark - Refresh
+
+/**
+ 隐藏头部
+ */
+@property (nonatomic, assign) BOOL hideHeaderRefresh;
+
+/**
+ 隐藏底部
+ */
+@property (nonatomic, assign) BOOL hideFooterRefresh;
+
+@property (nonatomic, assign) NSInteger mx_start;
+@property (nonatomic, assign) NSInteger mx_count;
+
+/**
+ 下拉刷新
+ */
+- (void)mx_headerRefresh;
+
+/**
+ 上拉刷新
+ */
+- (void)mx_footerRefresh;
 
 ```
 
 
 ## Rows List
 ```
-- (void)setupTableView {
-    self.cellIdentifier = @"cell";
-    self.refreshHeaderHidden = YES;
-    self.refreshFooterHidden = YES;    
-    [self.tableView registerClass:[UITableViewCell class]
-         = forCellReuseIdentifier:@"cell"];
-
-    self.EMCellHeightBlock = ^CGFloat(NSInteger index) {
-        if (index % 2 == 0) {
-            return 50.0;
-        }
-        else {
-            return 100.0;
-        }
-    };
-
-    [self em_reloadData:^(UITableViewCell *cell, NSString *item) {
-        cell.textLabel.text = item;
-    }];
-}
+self.tableView.frame = self.view.bounds;
+self.cellIdentifier = @"cell";
+self.hideHeaderRefresh = YES;
+self.hideFooterRefresh = YES;
+[self.tableView registerClass:[UITableViewCell class]
+       forCellReuseIdentifier:@"cell"];
+    
+self.MXCellHeightBlock = ^CGFloat(NSIndexPath *indexPath) {
+    if (indexPath.row % 2 == 0) {
+        return 50.0;
+       }
+    else {
+        return 100.0;
+    }
+};
+    
+[self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
+    cell.textLabel.text = item;
+}];
 ```
 ## Sections List
 ```
-- (void)setupTableView {
-    self.sectionMode = YES;
-    self.cellIdentifier = @"cell";
-    self.refreshHeaderHidden = YES;
-    self.refreshFooterHidden = YES;  
-    self.stabledCellHeight = 100.0;
-    [self.tableView registerClass:[UITableViewCell class]
-         = forCellReuseIdentifier:@"cell"];
-
-    self.EMHeadHeightBlock = ^CGFloat(NSInteger index) {
-        if (index == 0) {
-            return 10.0;
-        }
-        else {
-            return 10.0;
-        }
-    };
-
-    [self em_reloadData:^(UITableViewCell *cell, NSString *item) {
-        cell.textLabel.text = item;
-    }];
-}
+self.tableView.frame = self.view.bounds;
+self.sectionIsSingle = NO;
+self.cellIdentifier = @"cell";
+self.hideHeaderRefresh = YES;
+self.hideFooterRefresh = YES;  
+self.rowHeight = 100.0;
+[self.tableView registerClass:[UITableViewCell class]
+       forCellReuseIdentifier:@"cell"];
+    
+self.MXHeaderHeightBlock = ^CGFloat(NSInteger index) {
+    if (index == 0) {
+        return 0;
+    }
+    else {
+        return 10.0;
+    }
+};
+    
+[self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
+    cell.textLabel.text = item;
+}];
 ```
 
 ## Header/Footer Refresh
 ```
-#pragma mark - Refresh
-- (void)em_headerRefresh {
+- (void)mx_headerRefresh {
     [self.dataList removeAllObjects];
+    self.mx_start = 0;
     for (NSInteger i = 0; i < 20; i++) {
         [self.dataList addObject:@(i).stringValue];
     }
-    [super em_headerRefresh];
+    self.hideFooterRefresh = NO;
+    [super mx_headerRefresh];
 }
 
-- (void)em_footerRefresh {
+- (void)mx_footerRefresh {
     NSInteger count = (arc4random() + 1) % 20;
     for (NSInteger i = 0; i < count; i++) {
         [self.dataList addObject:@(i).stringValue];
     }
-
-    self.em_start += count;
-    [super em_footerRefresh];
+    
+    self.mx_start = self.dataList.count;
+    [super mx_footerRefresh];
 }
 ```
 
