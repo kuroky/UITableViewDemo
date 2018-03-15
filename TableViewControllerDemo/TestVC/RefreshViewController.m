@@ -70,6 +70,7 @@
         [self.dataList addObject:@(i).stringValue];
     }
     self.hideFooterRefresh = NO;
+    [self.tableView reloadData];
     [super mx_headerRefresh];
 }
 

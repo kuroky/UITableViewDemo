@@ -50,7 +50,6 @@
 }
 
 - (void)mx_headerRefresh {
-    [self.tableView reloadData];
     [self.tableView.mj_header endRefreshing];
     if (!self.hideFooterRefresh) {
         self.tableView.mj_footer.hidden = NO;
@@ -59,7 +58,6 @@
 }
 
 - (void)mx_footerRefresh {
-    [self.tableView reloadData];
     [self.tableView.mj_footer endRefreshing];
     if (self.mx_start % self.mx_count != 0) {
         self.tableView.mj_footer.hidden = YES;
