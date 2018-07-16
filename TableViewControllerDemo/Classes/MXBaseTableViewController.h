@@ -13,9 +13,17 @@
  
  @param cell custom cell
  @param item model data
+ */
+typedef void (^MXCellConfigBlock)(id cell, id item);
+
+/**
+ cell设置
+ 
+ @param cell custom cell
+ @param item model data
  @param indexPath NSIndexPath
  */
-typedef void (^MXCellConfigBlock)(id cell, id item, NSIndexPath *indexPath);
+typedef void (^MXCellConfigIndexPathBlock)(id cell, id item, NSIndexPath *indexPath);
 
 /**
  Custom TableViewController
@@ -29,7 +37,14 @@ typedef void (^MXCellConfigBlock)(id cell, id item, NSIndexPath *indexPath);
  */
 - (void)mx_reloadData:(MXCellConfigBlock)block;
 
-@property (strong, nonatomic, readonly) UITableView *tableView;
+/**
+ reload tableview之前调用
+ 
+ @param block cell设置
+ */
+- (void)mx_reloadIndexPath:(MXCellConfigIndexPathBlock)block;
+
+@property (weak, nonatomic, readonly) UITableView *tableView;
 
 /**
  tableview section 一行 

@@ -12,8 +12,10 @@
 
 @interface MXBaseTableViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic, readwrite) UITableView *tableView;
+@property (weak, nonatomic, readwrite) UITableView *tableView;
+
 @property (nonatomic, copy) MXCellConfigBlock cellHandler;
+@property (nonatomic, copy) MXCellConfigIndexPathBlock cellIndexPathHandler;
 
 @end
 
@@ -25,12 +27,13 @@
 }
 
 - (void)mx_setupUI {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.tableFooterView = [UIView new];
-    [self.view addSubview:self.tableView];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    tableView.dataSource = self;
+    tableView.delegate = self;
+    tableView.backgroundColor = [UIColor clearColor];
+    tableView.tableFooterView = [UIView new];
+    [self.view addSubview:tableView];
+    self.tableView = tableView;
     
     self.sectionIsSingle = YES;
     self.hideFooterRefresh = YES; // 默认最开始隐藏上拉刷新
@@ -69,10 +72,11 @@
 }
 
 - (void)mx_reloadData:(MXCellConfigBlock)block {
-    if (!block) {
-        return;
-    }
     self.cellHandler = [block copy];
+}
+
+- (void)mx_reloadIndexPath:(MXCellConfigIndexPathBlock)block {
+    self.cellIndexPathHandler = [block copy];
 }
 
 #pragma mark - Table view data source
@@ -81,7 +85,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.sectionIsSingle ? self.dataList.count : 1;
+    if (self.sectionIsSingle) {
+        return self.dataList.count;
+    }
+    else {
+        id items = self.dataList[section];
+        return [items isKindOfClass:[NSArray class]] ? ((NSArray *)items).count : 1;
+    }
 }
 
 // 为每个cell自定义高度或使用同一高度
@@ -108,14 +118,25 @@
 }
 
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath {
-    return self.sectionIsSingle ? self.dataList[indexPath.row] : self.dataList[indexPath.section];
+    if (self.sectionIsSingle) {
+        return self.dataList[indexPath.row];
+    }
+    else {
+        id items = self.dataList[indexPath.section];
+        return [items isKindOfClass:[NSArray class]] ? ((NSArray *)items)[indexPath.row] : items;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:self.cellIdentifier
                                                             forIndexPath:indexPath];
     id item = [self itemAtIndexPath:indexPath];
-    (self.cellHandler && cell) ? self.cellHandler(cell, item, indexPath) : nil;
+    if (self.cellHandler) {
+        self.cellHandler(cell, item);
+    }
+    else if (self.cellIndexPathHandler) {
+        self.cellIndexPathHandler(cell, item, indexPath);
+    }
     return cell;
 }
 

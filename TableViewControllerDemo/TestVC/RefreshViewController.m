@@ -57,8 +57,8 @@
         }
     };
     
-    [self mx_reloadData:^(UITableViewCell *cell, NSString *item, NSIndexPath *indexPath) {
-        cell.textLabel.text = @(indexPath.section).stringValue;
+    [self mx_reloadData:^(UITableViewCell *cell, NSString *item) {
+        cell.textLabel.text = item;
     }];
 }
 
