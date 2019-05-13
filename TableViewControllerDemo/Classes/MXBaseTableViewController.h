@@ -14,7 +14,7 @@
  @param cell custom cell
  @param item model data
  */
-typedef void (^MXCellConfigBlock)(id cell, id item);
+typedef void (^MXCellConfigBlock)(__kindof UITableViewCell *cell, id item);
 
 /**
  cell设置
@@ -23,7 +23,7 @@ typedef void (^MXCellConfigBlock)(id cell, id item);
  @param item model data
  @param indexPath NSIndexPath
  */
-typedef void (^MXCellConfigIndexPathBlock)(id cell, id item, NSIndexPath *indexPath);
+typedef void (^MXCellConfigIndexPathBlock)(__kindof UITableViewCell *cell, id item, NSIndexPath *indexPath);
 
 /**
  Custom TableViewController

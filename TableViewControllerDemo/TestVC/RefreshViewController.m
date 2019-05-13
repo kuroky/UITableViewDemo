@@ -64,14 +64,17 @@
 
 #pragma mark - Refresh
 - (void)mx_headerRefresh {
-    [self.dataList removeAllObjects];
-    self.mx_start = 0;
-    for (NSInteger i = 0; i < 20; i++) {
-        [self.dataList addObject:@(i).stringValue];
-    }
-    self.hideFooterRefresh = NO;
-    [self.tableView reloadData];
-    [super mx_headerRefresh];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.dataList removeAllObjects];
+        self.mx_start = 0;
+        for (NSInteger i = 0; i < 20; i++) {
+            [self.dataList addObject:@(i).stringValue];
+        }
+        self.hideFooterRefresh = NO;
+        [self.tableView reloadData];
+        [super mx_headerRefresh];
+    });
+    
 }
 
 - (void)mx_footerRefresh {
